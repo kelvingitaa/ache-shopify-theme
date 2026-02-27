@@ -1,0 +1,81 @@
+<!-- FEATURES STRIP -->
+<div class="features-strip">
+  {% for block in section.blocks %}
+    <div class="feature-item" {{ block.shopify_attributes }}>
+      <div class="feature-icon">{{ block.settings.icon | default: '✦' }}</div>
+      <div>
+        <div class="feature-title">{{ block.settings.title }}</div>
+        <div class="feature-desc">{{ block.settings.description }}</div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "Features Strip",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon/Emoji",
+          "default": "✦"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Feature description goes here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Features Strip",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "400gsm Heavyweight",
+            "description": "Premium fleece — heavy enough to feel like an embrace."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Made on Demand",
+            "description": "Nothing produced until it belongs to someone."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Hidden Inner Tag",
+            "description": "\"He knows the ache.\" — John 11:35. A blessing only you see."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Free Shipping $120+",
+            "description": "Worldwide. Every order arrives in branded packaging."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

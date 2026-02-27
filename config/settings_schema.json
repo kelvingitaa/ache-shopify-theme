@@ -1,0 +1,26 @@
+[
+    {
+        "name": "theme_info",
+        "theme_name": "ACHE Modern Theme",
+        "theme_author": "Antigravity",
+        "theme_version": "1.0.0",
+        "theme_support_url": "https://example.com"
+    },
+    {
+        "name": "Social media",
+        "settings": [
+            {
+                "type": "text",
+                "id": "social_instagram_link",
+                "label": "Instagram link",
+                "info": "https:\/\/instagram.com\/ache"
+            },
+            {
+                "type": "text",
+                "id": "social_tiktok_link",
+                "label": "TikTok link",
+                "info": "https:\/\/tiktok.com\/@ache"
+            }
+        ]
+    }
+]

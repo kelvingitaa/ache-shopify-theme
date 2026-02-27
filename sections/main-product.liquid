@@ -1,0 +1,143 @@
+<!-- PRODUCT PAGE -->
+<div class="product-layout">
+
+  <!-- Gallery -->
+  <div class="product-gallery">
+    <div class="product-main-img">
+      {% if product.featured_image != blank %}
+        <img src="{{ product.featured_image | img_url: 'master' }}" alt="{{ product.title | escape }}" style="width: 100%; height: 100%; object-fit: cover;">
+      {% else %}
+        <span class="product-main-img-text">ACHE</span>
+        <div style="position:absolute;bottom:1.5rem;left:1.5rem;font-size:.42rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(0,0,0,.3);">Replace with product image</div>
+      {% endif %}
+    </div>
+    <div class="product-thumb-row">
+      {% for image in product.images limit: 4 %}
+        <div class="product-thumb {% if forloop.first %}active{% endif %} pt-{{ forloop.index }}" onclick="switchThumb(this)" style="background-image: url('{{ image | img_url: 'medium' }}'); background-size: cover; background-position: center;">
+        </div>
+      {% else %}
+        <div class="product-thumb active pt-1" onclick="switchThumb(this)"><span class="product-thumb-text">Front</span></div>
+        <div class="product-thumb pt-2" onclick="switchThumb(this)"><span class="product-thumb-text" style="color:rgba(255,255,255,.2);">Back</span></div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Details -->
+  <div class="product-details">
+
+    <div class="product-breadcrumb">
+      <a href="{{ routes.collections_url }}">Collections</a>
+      <span>/</span>
+      {% if collection %}
+        <a href="{{ collection.url }}">{{ collection.title }}</a>
+      {% else %}
+        <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      {% endif %}
+      <span>/</span>
+      {{ product.title }}
+    </div>
+
+    <div class="product-collection-tag">{{ product.vendor | default: 'COLLECTION' | upcase }}</div>
+    <h1 class="product-name-lg">{{ product.title }}</h1>
+    <div class="product-verse-tag">{{ product.metafields.custom.verse | default: '"Bear one another\'s burdens, and so fulfil the law of Christ." — Galatians 6:2' }}</div>
+
+    <div class="product-price-lg">{{ product.price | money }}</div>
+
+    <form method="post" action="/cart/add" accept-charset="UTF-8" class="product-form" enctype="multipart/form-data">
+      <input type="hidden" name="form_type" value="product">
+      <input type="hidden" name="utf8" value="✓">
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      
+      {% unless product.has_only_default_variant %}
+        {% for option in product.options_with_values %}
+          {% if option.name == 'Color' or option.name == 'Colour' %}
+            <!-- Colour -->
+            <div class="product-option-label">Colour <span>{{ option.selected_value }}</span></div>
+            <div class="colour-row">
+              {% for value in option.values %}
+                <div class="colour-option {% if option.selected_value == value %}active{% endif %}" title="{{ value }}" onclick="selectColour(this)" style="background:{{ value | downcase | replace: ' ', '' }};"></div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <!-- Size or Other -->
+            <div class="product-option-label">{{ option.name }} <span>Select a {{ option.name | downcase }}</span></div>
+            <div class="size-row">
+              {% for variant in product.variants %}
+                {% if variant.options[forloop.parentloop.index0] %}
+                  <button type="button" class="size-option {% unless variant.available %}sold-out{% endunless %} {% if product.selected_or_first_available_variant.id == variant.id %}active{% endif %}" onclick="selectSize(this)" data-variant-id="{{ variant.id }}">
+                    {{ variant.options[forloop.parentloop.index0] }}
+                  </button>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endunless %}
+
+      <button type="button" class="size-guide-link">Size Guide →</button>
+
+      <button type="submit" class="add-to-bag-btn" onclick="event.preventDefault(); addToBag(event); this.closest('form').submit();">
+        Add to Bag ✦
+      </button>
+      <button type="button" class="wishlist-btn">+ Save to Wishlist</button>
+    </form>
+
+    <!-- Product Story -->
+    <div class="product-story">
+      <div class="product-story-title">The Story Behind This Piece</div>
+      <div class="product-story-body">{{ product.description | default: 'A premium piece from ACHE. Built for those who carry the weight.' }}</div>
+    </div>
+
+    <!-- Inner Tag Feature -->
+    <div class="product-inner-tag">
+      <div>
+        <div class="product-inner-tag-label">Hidden Inner Tag</div>
+        <div class="product-inner-tag-text">"He knows the ache."</div>
+        <div class="product-inner-tag-ref">John 11:35 — on every ACHE garment</div>
+      </div>
+    </div>
+
+    <!-- Accordion -->
+    <div class="product-details-accordion">
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          Details & Materials
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <strong>Fabric:</strong> 100% heavyweight combed cotton · 400gsm<br><br>
+          <strong>Inner Label:</strong> "He knows the ache." · John 11:35<br><br>
+          <strong>Fits true to oversized size</strong>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          Care Instructions
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          Machine wash cold · Inside out · Do not tumble dry · Lay flat to dry
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          Shipping & Returns
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <strong>Made on demand</strong> — allow 5–7 business days production<br><br>
+          <strong>Free shipping</strong> on orders over $120<br><br>
+          <strong>Returns:</strong> 30-day return window
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Template",
+  "settings": []
+}
+{% endschema %}

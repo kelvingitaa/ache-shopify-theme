@@ -1,0 +1,8 @@
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker">
+    {% for i in (1..10) %}
+      <span class="ticker-text">{{ section.settings.ticker_text | default: 'He knows the ache.' }} <span class="ticker-dot">✦</span></span>
+    {% endfor %}
+  </div>
+</div>

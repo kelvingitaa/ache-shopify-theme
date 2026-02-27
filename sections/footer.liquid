@@ -1,0 +1,73 @@
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">{{ shop.name | default: 'ACHE' }}</div>
+      <div class="footer-brand-verse">"He knows the ache."<br>Biblical streetwear for the in-between season.</div>
+      <div class="footer-brand-scripture">John 11:35 — "Jesus wept."</div>
+    </div>
+    
+    {% for block in section.blocks %}
+      {% if block.type == 'link_list' %}
+        <div>
+          <div class="footer-col-title">{{ block.settings.title }}</div>
+          <div class="footer-links">
+            {% for link in linklists[block.settings.menu].links %}
+              <a href="{{ link.url }}" class="footer-link">{{ link.title }}</a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+    
+    <div>
+      <div class="footer-col-title">Community</div>
+      <div class="footer-links">
+        <a href="{{ settings.social_instagram_link }}" class="footer-link">Instagram</a>
+        <a href="{{ settings.social_tiktok_link }}" class="footer-link">TikTok</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">© {{ 'now' | date: "%Y" }} {{ shop.name }}. All rights reserved. Biblical Streetwear.</div>
+    <div class="footer-socials">
+      <a href="{{ settings.social_instagram_link }}" class="footer-social">Instagram</a>
+      <a href="{{ settings.social_tiktok_link }}" class="footer-social">TikTok</a>
+    </div>
+  </div>
+
+  <div class="footer-inner-tag">"He knows the ache." — The words on every inner tag. John 11:35.</div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Quick links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "link_list"
+      }
+    ]
+  }
+}
+{% endschema %}

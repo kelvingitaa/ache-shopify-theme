@@ -1,0 +1,120 @@
+<!-- BAG PAGE / CART PAGE -->
+<div class="page" id="page-bag">
+  <div class="bag-layout">
+    <!-- Main -->
+    <div class="bag-main">
+      <div class="bag-title-row">
+        <h1 class="bag-title">Your Bag</h1>
+        <span class="bag-count">{{ cart.item_count }} Items</span>
+      </div>
+
+      {% if cart.item_count > 0 %}
+        <form action="{{ routes.cart_url }}" method="post" id="cart">
+          {% for item in cart.items %}
+            <div class="bag-item">
+              <div class="bag-item-img">
+                <div class="bag-item-img-inner si-{% cycle '1', '2', '3' %}" style="display:flex;align-items:center;justify-content:center;">
+                  {% if item.image %}
+                    <img src="{{ item.image | img_url: '200x' }}" alt="{{ item.title | escape }}" style="width: 100%; height: 100%; object-fit: cover;">
+                  {% else %}
+                    <span style="font-size:.42rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(0,0,0,.2);">ACHE</span>
+                  {% endif %}
+                </div>
+              </div>
+              <div>
+                <div class="bag-item-collection">{{ item.vendor | upcase }}</div>
+                <div class="bag-item-name"><a href="{{ item.url }}" style="text-decoration:none;color:inherit;">{{ item.product.title }}</a></div>
+                <div class="bag-item-meta">
+                  {% unless item.product.has_only_default_variant %}
+                    {{ item.variant.title }}
+                  {% endunless %}
+                </div>
+                <div class="qty-control">
+                  <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity={{ item.quantity | minus: 1 }}" class="qty-btn" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">−</a>
+                  <span class="qty-num">{{ item.quantity }}</span>
+                  <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" style="display:none;" />
+                  <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity={{ item.quantity | plus: 1 }}" class="qty-btn" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">+</a>
+                </div>
+                <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" class="bag-remove">Remove</a>
+              </div>
+              <div class="bag-item-price">{{ item.final_line_price | money }}</div>
+            </div>
+          {% endfor %}
+        </form>
+      {% else %}
+        <div class="bag-empty-state">
+          <div class="bag-empty-title">Your bag is empty</div>
+          <div class="bag-empty-verse">"Bear one another's burdens, and so fulfil the law of Christ."<br><br>— Galatians 6:2</div>
+        </div>
+      {% endif %}
+
+      <!-- Continue -->
+      <div style="margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn-ghost">← Continue Shopping</a>
+      </div>
+
+      <!-- Inner tag note -->
+      <div style="margin-top:3rem;padding:2rem;background:var(--off-white);border-left:2px solid var(--black);">
+        <div style="font-size:.42rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--text-grey);margin-bottom:.5rem;">Included with every order</div>
+        <div style="font-size:.72rem;font-style:italic;color:var(--black);margin-bottom:.3rem;">"He knows the ache." — John 11:35</div>
+        <div style="font-size:.6rem;color:var(--text-grey);">Hidden inner neck label on every ACHE garment. A private blessing worn closest to the skin.</div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="bag-sidebar">
+      <div class="bag-summary-title">Order Summary</div>
+
+      <div class="bag-summary-row">
+        <span class="bag-summary-label">Subtotal ({{ cart.item_count }} items)</span>
+        <span class="bag-summary-val">{{ cart.total_price | money }}</span>
+      </div>
+      <div class="bag-summary-row">
+        <span class="bag-summary-label">Shipping</span>
+        <span class="bag-summary-val">Calculated at checkout</span>
+      </div>
+
+      <div class="bag-summary-divider"></div>
+      <div class="bag-summary-total">
+        <span>Total</span>
+        <span>{{ cart.total_price | money }}</span>
+      </div>
+
+      {% if cart.item_count > 0 %}
+        <button type="submit" name="checkout" form="cart" class="bag-checkout">Checkout — {{ cart.total_price | money }} →</button>
+      {% endif %}
+      
+      <a href="{{ routes.all_products_collection_url }}" class="bag-continue" style="display:block;text-align:center;text-decoration:none;">Continue Shopping</a>
+
+      <div class="bag-secure">🔒 &nbsp; Secure checkout · SSL encrypted</div>
+
+      <div class="bag-inner-tag">
+        Every ACHE order arrives in branded packaging with a handwritten note.<br>
+        <em>"He knows the ache." — John 11:35</em>
+      </div>
+
+      <!-- Free shipping progress -->
+      {% assign shipping_threshold = 12000 %}
+      <div style="margin-top:2rem;padding:1.5rem;background:var(--white);border:1px solid var(--mid);">
+        <div style="font-size:.42rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--text-grey);margin-bottom:.8rem;">Free Shipping Progress</div>
+        {% if cart.total_price >= shipping_threshold %}
+          <div style="font-size:.5rem;color:var(--dark-grey);"><strong>You have unlocked free shipping!</strong></div>
+        {% else %}
+          {% assign amount_left = shipping_threshold | minus: cart.total_price %}
+          {% assign progress = cart.total_price | times: 100.0 | divided_by: shipping_threshold | round %}
+          <div style="height:4px;background:var(--mid);border-radius:2px;margin-bottom:.6rem;overflow:hidden;">
+            <div style="height:100%;width:{{ progress }}%;background:var(--black);border-radius:2px;transition:width .5s;"></div>
+          </div>
+          <div style="font-size:.5rem;color:var(--dark-grey);">Spend <strong>{{ amount_left | money }} more</strong> for free shipping</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart Page",
+  "settings": []
+}
+{% endschema %}

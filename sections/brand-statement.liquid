@@ -1,0 +1,59 @@
+<!-- BRAND STATEMENT -->
+<section class="statement-section reveal">
+  <div class="statement-eyebrow">{{ section.settings.eyebrow }}</div>
+  <div class="statement-quote">{{ section.settings.quote }}</div>
+  <div class="statement-reference">{{ section.settings.reference }}</div>
+  <div class="statement-divider"></div>
+  <p class="statement-body">{{ section.settings.body }}</p>
+  {% if section.settings.button_link != blank %}
+    <a href="{{ section.settings.button_link }}" class="statement-cta">{{ section.settings.button_label }}</a>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Brand Statement",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "The Foundation"
+    },
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Quote",
+      "default": "\"He stood at the grave knowing what He was about to do — and still, He wept.\""
+    },
+    {
+      "type": "text",
+      "id": "reference",
+      "label": "Reference",
+      "default": "John 11:35"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body Text",
+      "default": "If God Himself ached, then your aching is not weakness. It is sacred. It is the language of a soul that has loved something, lost something, carried someone. ACHE is made for the in-between — the midnight cry, the weight you carry for others, the season before the answer."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Read Our Story →"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Statement"
+    }
+  ]
+}
+{% endschema %}

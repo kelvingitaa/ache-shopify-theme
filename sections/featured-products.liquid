@@ -1,0 +1,121 @@
+<!-- PRODUCTS -->
+<section class="products-section reveal">
+  <div class="section-header">
+    <div>
+      <div class="section-label">{{ section.settings.subheading }}</div>
+      <h2 class="section-title">{{ section.settings.heading }}</h2>
+    </div>
+    {% if section.settings.button_link != blank %}
+      <a href="{{ section.settings.button_link }}" class="section-link">{{ section.settings.button_label }}</a>
+    {% endif %}
+  </div>
+
+  <div class="products-grid">
+    {% assign collection = collections[section.settings.collection] %}
+    {% for product in collection.products limit: section.settings.product_limit %}
+      <div class="product-card" onclick="window.location.href='{{ product.url }}'">
+        <div class="product-image">
+          {% if product.tags contains 'New' %}
+            <span class="prod-badge new">New</span>
+          {% endif %}
+          <div class="product-image-bg" style="background: linear-gradient(160deg, #d4ccb8 0%, #bfb59e 100%);">
+            {% if product.featured_image != blank %}
+              <img src="{{ product.featured_image | img_url: '500x' }}" alt="{{ product.title | escape }}" style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+              <span style="font-size:0.45rem;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,0,0,0.25);">Product Image</span>
+              <span style="font-size:1.5rem;font-weight:800;color:rgba(0,0,0,0.08);letter-spacing:0.1em;">ACHE</span>
+            {% endif %}
+          </div>
+          <button class="product-quick-add" onclick="event.stopPropagation(); window.location.href='{{ product.url }}'">View Product</button>
+        </div>
+        <div class="product-info">
+          <div class="product-collection-tag">{{ product.vendor | default: 'COLLECTION' }}</div>
+          <div class="product-name">{{ product.title }}</div>
+          <div class="product-price-row">
+            <span class="product-price">{{ product.price | money }}</span>
+            <div class="product-sizes">
+              {% for variant in product.variants %}
+                {% if variant.option1 != blank and forloop.index <= 4 %}
+                  <div class="size-dot">{{ variant.option1 | truncate: 2, '' }}</div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      {% for i in (1..4) %}
+        <div class="product-card">
+          <div class="product-image">
+            <div class="product-image-bg" style="background: linear-gradient(160deg, #d4ccb8 0%, #bfb59e 100%);">
+              <span style="font-size:0.45rem;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,0,0,0.25);">Product Image</span>
+              <span style="font-size:1.5rem;font-weight:800;color:rgba(0,0,0,0.08);letter-spacing:0.1em;">ACHE</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-collection-tag">BURDENS · Collection 01</div>
+            <div class="product-name">Example Product {{ i }}</div>
+            <div class="product-price-row">
+              <span class="product-price">$55.00</span>
+              <div class="product-sizes">
+                <div class="size-dot">S</div>
+                <div class="size-dot">M</div>
+                <div class="size-dot">L</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "New In"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Pieces"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "min": 4,
+      "max": 12,
+      "step": 4,
+      "label": "Product Limit",
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "View All →"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products"
+    }
+  ]
+}
+{% endschema %}

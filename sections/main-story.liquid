@@ -1,0 +1,65 @@
+<!-- STORY PAGE -->
+<div class="page-hero">
+  <div class="page-hero-bg-text">{{ page.title }}</div>
+  <div class="page-eyebrow">ACHE — The Foundation</div>
+  <h1 class="page-title">
+    <em>Why we exist.</em>
+    {{ page.title }}
+  </h1>
+</div>
+
+<!-- Intro Split -->
+<div class="story-intro reveal">
+  <div class="story-intro-img">
+    <span class="story-intro-img-text">ACHE</span>
+  </div>
+  <div class="story-intro-content">
+    <div class="story-intro-eyebrow">The Beginning</div>
+    <h2 class="story-intro-title">
+      <em>It started with</em>
+      Two Words.
+    </h2>
+    <div class="story-intro-body">
+      {{ page.content }}
+    </div>
+    <a href="{{ routes.collections_url }}" class="btn btn-black" style="margin-top:1.5rem">Shop the Collections →</a>
+  </div>
+</div>
+
+<!-- The Verse -->
+<div class="story-verse-block reveal">
+  <div class="story-verse-ref">John 11:35 — The Founding Verse</div>
+  <div class="story-verse-text">"Jesus wept."</div>
+  <div class="story-verse-cite">The shortest verse. The deepest theology.</div>
+</div>
+
+<!-- The Pillars -->
+<div class="story-pillars reveal">
+  <div class="story-pillar">
+    <div class="story-pillar-num">01</div>
+    <div class="story-pillar-title">The Ache is Sacred</div>
+    <div class="story-pillar-body">We refuse to skip the grief. Every collection leans into a real human experience — burden, lament, covenant. These are not abstract concepts. They are Monday morning. They are 3am.</div>
+  </div>
+  <div class="story-pillar">
+    <div class="story-pillar-num">02</div>
+    <div class="story-pillar-title">Scripture on the Skin</div>
+    <div class="story-pillar-body">Every garment carries the Word — not as decoration but as declaration. The verse on your chest. The promise on your cuff. The hidden tag at your neck that only you know is there.</div>
+  </div>
+  <div class="story-pillar">
+    <div class="story-pillar-num">03</div>
+    <div class="story-pillar-title">Quality as Theology</div>
+    <div class="story-pillar-body">400gsm heavyweight fleece — heavy enough to feel like an embrace. Every detail is intentional. Nothing cheap. Because the Word deserves to be carried in something that lasts.</div>
+  </div>
+  <div class="story-pillar">
+    <div class="story-pillar-num">04</div>
+    <div class="story-pillar-title">Community — The Carry</div>
+    <div class="story-pillar-body">ACHE is not a brand you follow. It's a community you join. People who know what it means to carry something heavy — and to find each other in the weight.</div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Story Page",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,27 @@
+{
+  "name": "Home page",
+  "sections": {
+    "hero": {
+      "type": "hero"
+    },
+    "features_strip": {
+      "type": "features-strip"
+    },
+    "collections_grid": {
+      "type": "collections-grid"
+    },
+    "featured_products": {
+      "type": "featured-products"
+    },
+    "brand_statement": {
+      "type": "brand-statement"
+    }
+  },
+  "order": [
+    "hero",
+    "features_strip",
+    "collections_grid",
+    "featured_products",
+    "brand_statement"
+  ]
+}

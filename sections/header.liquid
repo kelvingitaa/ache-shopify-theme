@@ -1,0 +1,47 @@
+{% if section.settings.show_ticker %}
+  {% render 'ticker' %}
+{% endif %}
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-left">
+    {% for link in linklists[section.settings.main_linklist].links %}
+      <a href="{{ link.url }}" class="nav-link {% if link.active %}active{% endif %}">{{ link.title }}</a>
+    {% endfor %}
+  </div>
+  
+  <a href="{{ routes.root_url }}" class="nav-logo">{{ shop.name | default: 'ACHE' }}</a>
+  
+  <div class="nav-right">
+    <a href="{{ routes.search_url }}" class="nav-icon">Search</a>
+    <button class="nav-icon" onclick="toggleCart()">
+      Bag <span class="cart-count" id="cartCount">{{ cart.item_count }}</span>
+    </button>
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_ticker",
+      "label": "Show Ticker",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "ticker_text",
+      "label": "Ticker Text",
+      "default": "He knows the ache. ✦ BURDENS · LAMENT · COVENANT ✦ John 11:35"
+    },
+    {
+      "type": "link_list",
+      "id": "main_linklist",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}
