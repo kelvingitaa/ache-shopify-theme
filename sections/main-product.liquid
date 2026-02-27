@@ -74,12 +74,12 @@
         {% endfor %}
       {% endunless %}
 
-      <button type="button" class="size-guide-link">Size Guide →</button>
+      <a href="{{ pages['size-guide'].url | default: '#' }}" class="size-guide-link">Size Guide →</a>
 
       <button type="submit" class="add-to-bag-btn" onclick="event.preventDefault(); addToBag(event); this.closest('form').submit();">
         Add to Bag ✦
       </button>
-      <button type="button" class="wishlist-btn">+ Save to Wishlist</button>
+      <a href="{{ routes.account_url }}" class="wishlist-btn" style="display:inline-block;text-decoration:none;">+ Save to Wishlist</a>
     </form>
 
     <!-- Product Story -->

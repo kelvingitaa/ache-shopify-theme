@@ -5,9 +5,7 @@
   <div class="statement-reference">{{ section.settings.reference }}</div>
   <div class="statement-divider"></div>
   <p class="statement-body">{{ section.settings.body }}</p>
-  {% if section.settings.button_link != blank %}
-    <a href="{{ section.settings.button_link }}" class="statement-cta">{{ section.settings.button_label }}</a>
-  {% endif %}
+  <a href="{{ section.settings.button_link | default: pages['our-story'].url | default: '#' }}" class="statement-cta">{{ section.settings.button_label }}</a>
 </section>
 
 {% schema %}

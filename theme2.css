@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACHE — Inner Pages</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --white: #ffffff;
+  --off-white: #f8f7f5;
+  --light: #f0efed;
+  --mid: #e0dedd;
+  --text-grey: #888580;
+  --dark-grey: #3a3835;
+  --charcoal: #1e1c1a;
+  --black: #0a0908;
+  --font: 'Montserrat', sans-serif;
+  --nav-h: 60px;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--white);
+  color: var(--black);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+.cursor { width:8px; height:8px; background:var(--black); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .2s,height .2s; }
+.cursor-ring { width:32px; height:32px; border:1px solid rgba(0,0,0,0.4); border-radius:50%; position:fixed; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .3s,height .3s; }
+
+/* ── TICKER ── */
+.ticker { background:var(--black); color:var(--white); padding:8px 0; overflow:hidden; position:relative; z-index:100; }
+.ticker-track { display:flex; animation:tickerMove 28s linear infinite; white-space:nowrap; }
+.ticker-item { font-size:.55rem; font-weight:600; letter-spacing:.35em; text-transform:uppercase; padding-right:3rem; flex-shrink:0; }
+.ticker-dot { color:rgba(255,255,255,.3); }
+@keyframes tickerMove { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ── NAV ── */
+nav {
+  position:sticky; top:0; z-index:500;
+  background:var(--white); border-bottom:1px solid var(--mid);
+  height:var(--nav-h); display:flex; align-items:center;
+  justify-content:space-between; padding:0 2.5rem;
+  transition:box-shadow .3s;
+}
+nav.scrolled { box-shadow:0 2px 20px rgba(0,0,0,.06); }
+.nav-left { display:flex; gap:2rem; }
+.nav-link { font-size:.58rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--dark-grey); text-decoration:none; transition:color .2s; position:relative; cursor:none; }
+.nav-link::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:1px; background:var(--black); transform:scaleX(0); transition:transform .2s; }
+.nav-link:hover,.nav-link.active { color:var(--black); }
+.nav-link:hover::after,.nav-link.active::after { transform:scaleX(1); }
+.nav-logo { font-size:1.4rem; font-weight:800; letter-spacing:.25em; color:var(--black); text-decoration:none; position:absolute; left:50%; transform:translateX(-50%); cursor:none; }
+.nav-right { display:flex; gap:1.5rem; align-items:center; }
+.nav-btn { background:none; border:none; font-family:var(--font); font-size:.58rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--dark-grey); cursor:none; transition:color .2s; display:flex; align-items:center; gap:.4rem; text-decoration:none; }
+.nav-btn:hover { color:var(--black); }
+.cart-pill { background:var(--black); color:var(--white); width:18px; height:18px; border-radius:50%; font-size:.4rem; display:flex; align-items:center; justify-content:center; font-weight:700; }
+
+/* ── PAGE SYSTEM ── */
+.page { display:none; min-height:100vh; }
+.page.active { display:block; }
+
+/* ── SHARED ── */
+.page-hero {
+  background:var(--off-white);
+  padding:5rem 2.5rem 3.5rem;
+  border-bottom:1px solid var(--mid);
+  position:relative; overflow:hidden;
+}
+.page-hero-bg-text {
+  position:absolute; right:-1rem; top:50%; transform:translateY(-50%);
+  font-size:12rem; font-weight:800; color:transparent;
+  -webkit-text-stroke:1px rgba(0,0,0,.04);
+  pointer-events:none; white-space:nowrap; letter-spacing:.05em;
+}
+.page-eyebrow { font-size:.48rem; font-weight:700; letter-spacing:.45em; text-transform:uppercase; color:var(--text-grey); margin-bottom:.8rem; display:flex; align-items:center; gap:.8rem; }
+.page-eyebrow::before { content:''; display:block; width:20px; height:1px; background:var(--text-grey); }
+.page-title { font-size:clamp(2.5rem,7vw,6rem); font-weight:800; letter-spacing:-.02em; text-transform:uppercase; line-height:.95; color:var(--black); }
+.page-title em { display:block; font-weight:200; font-style:italic; font-size:.45em; letter-spacing:.06em; color:var(--dark-grey); margin-bottom:.2em; }
+.page-verse { font-size:.65rem; font-style:italic; color:var(--text-grey); margin-top:1rem; }
+
+.btn { display:inline-flex; align-items:center; gap:.7rem; padding:.82rem 2rem; font-family:var(--font); font-size:.58rem; font-weight:700; letter-spacing:.28em; text-transform:uppercase; text-decoration:none; cursor:none; transition:all .2s; border:1px solid; }
+.btn-black { background:var(--black); color:var(--white); border-color:var(--black); }
+.btn-black:hover { background:var(--white); color:var(--black); }
+.btn-white { background:var(--white); color:var(--black); border-color:var(--black); }
+.btn-white:hover { background:var(--black); color:var(--white); }
+.btn-ghost { background:none; color:var(--dark-grey); border-color:var(--mid); }
+.btn-ghost:hover { border-color:var(--black); color:var(--black); }
+
+.reveal { opacity:0; transform:translateY(20px); transition:opacity .7s ease,transform .7s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ══════════════════════════════════════
+   COLLECTIONS PAGE
+══════════════════════════════════════ */
+#page-collections .col-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2px;
+  margin-bottom:2px;
+}
+
+#page-collections .col-full {
+  display:grid;
+  grid-template-columns:1fr;
+}
+
+.col-panel {
+  position:relative; overflow:hidden; cursor:none;
+  aspect-ratio:4/3;
+  display:flex; align-items:flex-end;
+}
+
+.col-panel-full { aspect-ratio:16/7; }
+
+.col-bg {
+  position:absolute; inset:0;
+  transition:transform .6s cubic-bezier(.25,.46,.45,.94);
+  display:flex; align-items:center; justify-content:center;
+}
+.col-panel:hover .col-bg { transform:scale(1.03); }
+
+.cb-burdens { background:linear-gradient(145deg,#1a1310 0%,#2d2520 100%); }
+.cb-lament { background:linear-gradient(145deg,#e8e3dc 0%,#d5cdc4 100%); }
+.cb-covenant { background:linear-gradient(145deg,#c5bdb2 0%,#b0a89c 100%); }
+.cb-all { background:linear-gradient(145deg,#f0efed 0%,#e0ddd8 100%); }
+
+.col-bg-letter {
+  font-size:16rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; line-height:1;
+}
+.cb-burdens .col-bg-letter { color:rgba(255,255,255,.03); }
+.cb-lament .col-bg-letter,.cb-covenant .col-bg-letter,.cb-all .col-bg-letter { color:rgba(0,0,0,.04); }
+
+.col-overlay {
+  position:relative; z-index:2;
+  padding:2rem; width:100%;
+  background:linear-gradient(transparent,rgba(0,0,0,.55));
+}
+
+.cb-lament .col-overlay,.cb-covenant .col-overlay { background:linear-gradient(transparent,rgba(0,0,0,.35)); color:var(--white); }
+.cb-all .col-overlay { background:linear-gradient(transparent,rgba(0,0,0,.2)); color:var(--black); }
+
+.col-tag { font-size:.4rem; font-weight:700; letter-spacing:.35em; text-transform:uppercase; opacity:.6; margin-bottom:.3rem; }
+.col-name { font-size:clamp(1.5rem,4vw,3rem); font-weight:800; letter-spacing:.03em; text-transform:uppercase; margin-bottom:.2rem; }
+.col-ref { font-size:.5rem; font-style:italic; opacity:.55; margin-bottom:1rem; }
+.col-count { font-size:.48rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; opacity:.5; }
+
+.col-arrow {
+  position:absolute; top:1.5rem; right:1.5rem; z-index:3;
+  width:40px; height:40px; border:1px solid rgba(255,255,255,.25);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.7rem; color:white;
+  transform:translate(8px,-8px) rotate(45deg);
+  opacity:0; transition:opacity .3s,transform .3s;
+}
+.col-panel:hover .col-arrow { opacity:1; transform:translate(0,0) rotate(45deg); }
+
+/* Collection story strip */
+.col-story-strip {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--mid);
+  padding:4rem 2.5rem;
+  gap:3rem;
+  background:var(--white);
+}
+.col-story-item { }
+.col-story-num { font-size:3rem; font-weight:800; color:transparent; -webkit-text-stroke:1px rgba(0,0,0,.08); letter-spacing:.05em; margin-bottom:1rem; line-height:1; }
+.col-story-title { font-size:.7rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--black); margin-bottom:.6rem; }
+.col-story-body { font-size:.75rem; font-weight:400; color:var(--text-grey); line-height:1.8; }
+.col-story-verse { font-size:.6rem; font-style:italic; color:var(--dark-grey); margin-top:1rem; padding-left:1rem; border-left:2px solid var(--mid); }
+
+/* ══════════════════════════════════════
+   SHOP PAGE
+══════════════════════════════════════ */
+.shop-controls {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.5rem 2.5rem;
+  border-bottom:1px solid var(--mid);
+  background:var(--white);
+  position:sticky; top:var(--nav-h); z-index:100;
+}
+
+.filter-row { display:flex; gap:.5rem; flex-wrap:wrap; }
+.filter-btn {
+  border:1px solid var(--mid); background:none; font-family:var(--font);
+  font-size:.48rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--text-grey); padding:.45rem 1rem; cursor:none; transition:all .2s;
+}
+.filter-btn:hover,.filter-btn.active { background:var(--black); color:var(--white); border-color:var(--black); }
+
+.sort-select {
+  border:1px solid var(--mid); background:var(--white); font-family:var(--font);
+  font-size:.48rem; font-weight:600; letter-spacing:.15em; color:var(--dark-grey);
+  padding:.45rem 1rem; cursor:none; outline:none;
+}
+
+.product-count { font-size:.48rem; font-weight:600; letter-spacing:.2em; color:var(--text-grey); text-transform:uppercase; }
+
+.shop-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:2px; padding:2px;
+  background:var(--mid);
+}
+
+.shop-product-card {
+  background:var(--white); cursor:none; position:relative; overflow:hidden;
+}
+
+.shop-img {
+  aspect-ratio:3/4; position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--light);
+}
+
+.shop-img-inner {
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:.5rem;
+  transition:transform .5s cubic-bezier(.25,.46,.45,.94);
+}
+.shop-product-card:hover .shop-img-inner { transform:scale(1.04); }
+
+/* product colour strips */
+.si-1 { background:linear-gradient(160deg,#ccc9bc 0%,#b5b09f 100%); }
+.si-2 { background:linear-gradient(160deg,#0a0908 0%,#1e1c1a 100%); }
+.si-3 { background:linear-gradient(160deg,#2a3545 0%,#1e2535 100%); }
+.si-4 { background:linear-gradient(160deg,#d5d0c8 0%,#c2bdb5 100%); }
+.si-5 { background:linear-gradient(160deg,#3a2520 0%,#2a1810 100%); }
+.si-6 { background:linear-gradient(160deg,#e5e0d8 0%,#d5d0c5 100%); }
+
+.shop-badge {
+  position:absolute; top:1rem; left:1rem; z-index:2;
+  font-size:.4rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+  padding:.28rem .7rem; background:var(--black); color:var(--white);
+}
+.shop-badge.sale { background:#8b2020; }
+
+.shop-quick-add {
+  position:absolute; bottom:0; left:0; right:0; z-index:3;
+  background:var(--black); color:var(--white); border:none; padding:.85rem;
+  font-family:var(--font); font-size:.48rem; font-weight:700; letter-spacing:.28em; text-transform:uppercase;
+  cursor:none; transform:translateY(100%); transition:transform .3s cubic-bezier(.25,.46,.45,.94);
+}
+.shop-product-card:hover .shop-quick-add { transform:translateY(0); }
+
+.shop-info { padding:1.2rem 1.2rem; border-top:1px solid var(--mid); }
+.shop-coll-tag { font-size:.38rem; font-weight:600; letter-spacing:.3em; text-transform:uppercase; color:var(--text-grey); margin-bottom:.35rem; }
+.shop-name { font-size:.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--black); margin-bottom:.3rem; }
+.shop-verse { font-size:.48rem; font-style:italic; color:var(--text-grey); margin-bottom:.8rem; line-height:1.5; }
+.shop-bottom { display:flex; justify-content:space-between; align-items:center; }
+.shop-price { font-size:.78rem; font-weight:700; color:var(--black); }
+.shop-colours { display:flex; gap:.3rem; }
+.shop-colour-dot { width:14px; height:14px; border-radius:50%; border:1px solid var(--mid); }
+
+/* ══════════════════════════════════════
+   OUR STORY PAGE
+══════════════════════════════════════ */
+.story-intro {
+  display:grid; grid-template-columns:1fr 1fr;
+  min-height:70vh;
+}
+.story-intro-img {
+  background:linear-gradient(145deg,#1a1310 0%,#0a0908 100%);
+  display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+}
+.story-intro-img-text { font-size:8rem; font-weight:800; color:rgba(255,255,255,.03); letter-spacing:.1em; }
+.story-intro-content { padding:5rem 4rem; display:flex; flex-direction:column; justify-content:center; background:var(--off-white); }
+.story-intro-eyebrow { font-size:.48rem; font-weight:700; letter-spacing:.4em; text-transform:uppercase; color:var(--text-grey); margin-bottom:1.5rem; }
+.story-intro-title { font-size:clamp(2rem,4vw,3.5rem); font-weight:800; letter-spacing:-.02em; text-transform:uppercase; line-height:.95; color:var(--black); margin-bottom:1.5rem; }
+.story-intro-title em { display:block; font-weight:200; font-style:italic; font-size:.6em; color:var(--dark-grey); margin-bottom:.2em; }
+.story-intro-body { font-size:.8rem; color:var(--text-grey); line-height:1.9; margin-bottom:1.5rem; }
+
+.story-verse-block {
+  padding:4rem 2.5rem;
+  background:var(--black); color:var(--white);
+  text-align:center; position:relative; overflow:hidden;
+}
+.story-verse-block::before {
+  content:'11:35'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  font-size:18vw; font-weight:800; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.03);
+  pointer-events:none; white-space:nowrap;
+}
+.story-verse-ref { font-size:.5rem; font-weight:700; letter-spacing:.5em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-bottom:2rem; }
+.story-verse-text { font-size:clamp(1.5rem,4vw,3rem); font-weight:200; font-style:italic; color:var(--white); max-width:700px; margin:0 auto 1rem; line-height:1.4; position:relative; z-index:1; }
+.story-verse-cite { font-size:.55rem; font-weight:600; letter-spacing:.3em; text-transform:uppercase; color:rgba(255,255,255,.3); position:relative; z-index:1; }
+
+.story-pillars {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--mid); border-bottom:1px solid var(--mid);
+}
+.story-pillar {
+  padding:3rem 2rem; border-right:1px solid var(--mid);
+}
+.story-pillar:last-child { border-right:none; }
+.story-pillar-num { font-size:2.5rem; font-weight:800; color:transparent; -webkit-text-stroke:1px rgba(0,0,0,.1); margin-bottom:1rem; }
+.story-pillar-title { font-size:.6rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--black); margin-bottom:.6rem; }
+.story-pillar-body { font-size:.72rem; color:var(--text-grey); line-height:1.8; }
+
+.story-timeline {
+  padding:5rem 2.5rem;
+  background:var(--off-white);
+  max-width:800px; margin:0 auto;
+}
+.story-timeline-title { font-size:clamp(1.5rem,3vw,2.5rem); font-weight:800; text-transform:uppercase; letter-spacing:-.01em; margin-bottom:3rem; color:var(--black); }
+.timeline-item { display:grid; grid-template-columns:80px 1fr; gap:2rem; margin-bottom:3rem; padding-bottom:3rem; border-bottom:1px solid var(--mid); }
+.timeline-item:last-child { border-bottom:none; margin-bottom:0; }
+.timeline-num { font-size:.48rem; font-weight:700; letter-spacing:.3em; color:var(--text-grey); padding-top:.2rem; }
+.timeline-content-title { font-size:.7rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--black); margin-bottom:.5rem; }
+.timeline-content-body { font-size:.78rem; color:var(--text-grey); line-height:1.8; }
+
+/* ══════════════════════════════════════
+   BAG PAGE
+══════════════════════════════════════ */
+.bag-layout {
+  display:grid; grid-template-columns:1fr 380px;
+  min-height:calc(100vh - var(--nav-h) - 33px);
+  align-items:start;
+}
+
+.bag-main { padding:3rem 2.5rem; border-right:1px solid var(--mid); }
+.bag-title-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:2.5rem; border-bottom:1px solid var(--mid); padding-bottom:1.5rem; }
+.bag-title { font-size:clamp(1.5rem,3vw,2.5rem); font-weight:800; text-transform:uppercase; letter-spacing:-.01em; }
+.bag-count { font-size:.55rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--text-grey); }
+
+.bag-empty-state {
+  text-align:center; padding:6rem 2rem;
+}
+.bag-empty-icon { font-size:3rem; margin-bottom:1.5rem; opacity:.15; }
+.bag-empty-title { font-size:.8rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; margin-bottom:.8rem; }
+.bag-empty-verse { font-size:.7rem; font-style:italic; color:var(--text-grey); line-height:1.7; max-width:320px; margin:0 auto 2rem; }
+
+.bag-item {
+  display:grid; grid-template-columns:100px 1fr auto;
+  gap:1.5rem; padding:2rem 0;
+  border-bottom:1px solid var(--mid); align-items:start;
+}
+.bag-item-img {
+  width:100px; height:120px; background:var(--light);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.bag-item-img-inner { width:100%; height:100%; }
+.bag-item-collection { font-size:.4rem; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--text-grey); margin-bottom:.3rem; }
+.bag-item-name { font-size:.72rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--black); margin-bottom:.4rem; }
+.bag-item-meta { font-size:.5rem; font-weight:500; letter-spacing:.1em; color:var(--text-grey); margin-bottom:1rem; }
+.bag-item-price { font-size:.8rem; font-weight:700; color:var(--black); text-align:right; }
+.qty-control { display:flex; align-items:center; gap:.5rem; border:1px solid var(--mid); }
+.qty-btn { width:32px; height:32px; background:none; border:none; cursor:none; font-size:.9rem; color:var(--dark-grey); transition:background .2s; }
+.qty-btn:hover { background:var(--light); }
+.qty-num { font-size:.6rem; font-weight:700; min-width:24px; text-align:center; }
+.bag-remove { font-size:.42rem; font-weight:600; letter-spacing:.15em; text-transform:uppercase; color:var(--text-grey); background:none; border:none; cursor:none; text-decoration:underline; margin-top:.5rem; display:block; transition:color .2s; }
+.bag-remove:hover { color:var(--black); }
+
+.bag-sidebar { padding:3rem 2rem; position:sticky; top:calc(var(--nav-h) + 33px); background:var(--off-white); }
+.bag-summary-title { font-size:.6rem; font-weight:700; letter-spacing:.3em; text-transform:uppercase; margin-bottom:2rem; padding-bottom:1rem; border-bottom:1px solid var(--mid); }
+.bag-summary-row { display:flex; justify-content:space-between; margin-bottom:1rem; font-size:.65rem; }
+.bag-summary-label { color:var(--text-grey); font-weight:500; }
+.bag-summary-val { font-weight:700; color:var(--black); }
+.bag-summary-divider { height:1px; background:var(--mid); margin:1.5rem 0; }
+.bag-summary-total { display:flex; justify-content:space-between; font-size:.75rem; font-weight:700; margin-bottom:1.5rem; }
+.bag-checkout { width:100%; background:var(--black); color:var(--white); border:none; padding:1rem; font-family:var(--font); font-size:.58rem; font-weight:700; letter-spacing:.28em; text-transform:uppercase; cursor:none; margin-bottom:1rem; transition:background .2s; }
+.bag-checkout:hover { background:var(--dark-grey); }
+.bag-continue { width:100%; background:none; border:1px solid var(--mid); color:var(--dark-grey); padding:.85rem; font-family:var(--font); font-size:.55rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; cursor:none; transition:all .2s; }
+.bag-continue:hover { border-color:var(--black); color:var(--black); }
+.bag-secure { font-size:.42rem; color:var(--text-grey); text-align:center; margin-top:1rem; letter-spacing:.1em; }
+.bag-inner-tag { font-size:.42rem; font-style:italic; color:var(--text-grey); text-align:center; margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--mid); line-height:1.7; }
+
+/* ══════════════════════════════════════
+   PRODUCT PAGE
+══════════════════════════════════════ */
+.product-layout {
+  display:grid; grid-template-columns:1fr 1fr;
+  min-height:calc(100vh - var(--nav-h) - 33px);
+}
+
+.product-gallery { position:sticky; top:calc(var(--nav-h) + 33px); height:calc(100vh - var(--nav-h) - 33px); background:var(--off-white); overflow:hidden; }
+.product-main-img {
+  width:100%; height:80%;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(145deg,#ccc9bc 0%,#b5b09f 100%);
+  position:relative; overflow:hidden;
+}
+.product-main-img-text { font-size:8rem; font-weight:800; color:rgba(0,0,0,.04); letter-spacing:.1em; }
+.product-thumb-row { display:flex; gap:2px; height:20%; }
+.product-thumb {
+  flex:1; cursor:none; background:var(--light);
+  display:flex; align-items:center; justify-content:center;
+  border-top:2px solid transparent; transition:border-color .2s;
+}
+.product-thumb.active { border-top-color:var(--black); }
+.product-thumb-text { font-size:.4rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:rgba(0,0,0,.2); }
+
+/* different thumb colours */
+.pt-1 { background:linear-gradient(160deg,#ccc9bc 0%,#b5b09f 100%); }
+.pt-2 { background:linear-gradient(160deg,#0a0908 0%,#2a2520 100%); }
+.pt-3 { background:linear-gradient(160deg,#3a4a5a 0%,#2a3545 100%); }
+
+.product-details { padding:3rem 3.5rem; overflow-y:auto; height:100%; }
+
+.product-breadcrumb { display:flex; gap:.5rem; align-items:center; margin-bottom:2rem; font-size:.42rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--text-grey); }
+.product-breadcrumb a { color:var(--text-grey); text-decoration:none; transition:color .2s; cursor:none; }
+.product-breadcrumb a:hover { color:var(--black); }
+.product-breadcrumb span { color:var(--mid); }
+
+.product-collection-tag { font-size:.45rem; font-weight:700; letter-spacing:.35em; text-transform:uppercase; color:var(--text-grey); margin-bottom:.6rem; }
+.product-name-lg { font-size:clamp(1.8rem,3.5vw,3rem); font-weight:800; letter-spacing:-.01em; text-transform:uppercase; line-height:.95; color:var(--black); margin-bottom:.5rem; }
+.product-verse-tag { font-size:.58rem; font-style:italic; color:var(--text-grey); margin-bottom:1.5rem; }
+
+.product-price-lg { font-size:1.4rem; font-weight:700; color:var(--black); margin-bottom:2rem; letter-spacing:-.01em; }
+
+.product-option-label { font-size:.48rem; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--dark-grey); margin-bottom:.6rem; display:flex; justify-content:space-between; }
+.product-option-label span { color:var(--text-grey); font-weight:400; }
+
+.colour-row { display:flex; gap:.6rem; margin-bottom:2rem; }
+.colour-option { width:30px; height:30px; border-radius:50%; cursor:none; border:2px solid transparent; transition:border-color .2s; position:relative; }
+.colour-option.active { border-color:var(--black); }
+.colour-option::after { content:''; position:absolute; inset:-4px; border-radius:50%; border:1px solid transparent; }
+.colour-option.active::after { border-color:var(--black); }
+
+.size-row { display:flex; gap:.4rem; margin-bottom:2rem; flex-wrap:wrap; }
+.size-option {
+  height:40px; padding:0 1rem;
+  border:1px solid var(--mid); background:var(--white);
+  font-family:var(--font); font-size:.5rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--dark-grey); cursor:none; transition:all .2s; min-width:40px;
+}
+.size-option:hover { border-color:var(--dark-grey); color:var(--black); }
+.size-option.active { background:var(--black); color:var(--white); border-color:var(--black); }
+.size-option.sold-out { opacity:.3; cursor:not-allowed; text-decoration:line-through; }
+
+.size-guide-link { font-size:.42rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--text-grey); text-decoration:underline; cursor:none; transition:color .2s; background:none; border:none; font-family:var(--font); margin-bottom:2rem; display:block; }
+.size-guide-link:hover { color:var(--black); }
+
+.add-to-bag-btn {
+  width:100%; background:var(--black); color:var(--white); border:1px solid var(--black);
+  padding:1.1rem; font-family:var(--font); font-size:.6rem; font-weight:700;
+  letter-spacing:.3em; text-transform:uppercase; cursor:none; transition:all .2s; margin-bottom:.6rem;
+  display:flex; align-items:center; justify-content:center; gap:1rem;
+}
+.add-to-bag-btn:hover { background:var(--white); color:var(--black); }
+
+.wishlist-btn {
+  width:100%; background:none; color:var(--dark-grey); border:1px solid var(--mid);
+  padding:1rem; font-family:var(--font); font-size:.55rem; font-weight:600;
+  letter-spacing:.25em; text-transform:uppercase; cursor:none; transition:all .2s; margin-bottom:2rem;
+}
+.wishlist-btn:hover { border-color:var(--black); color:var(--black); }
+
+.product-story { padding:2rem 0; border-top:1px solid var(--mid); margin-top:1rem; }
+.product-story-title { font-size:.55rem; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:var(--black); margin-bottom:1rem; }
+.product-story-body { font-size:.75rem; color:var(--text-grey); line-height:1.9; }
+
+.product-details-accordion { margin-top:1.5rem; }
+.accordion-item { border-top:1px solid var(--mid); }
+.accordion-btn {
+  width:100%; display:flex; justify-content:space-between; align-items:center;
+  padding:1.2rem 0; background:none; border:none; cursor:none; font-family:var(--font);
+  font-size:.55rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--black); text-align:left;
+}
+.accordion-icon { font-size:.9rem; color:var(--text-grey); transition:transform .3s; }
+.accordion-item.open .accordion-icon { transform:rotate(45deg); }
+.accordion-body { display:none; padding:0 0 1.5rem; font-size:.72rem; color:var(--text-grey); line-height:1.9; }
+.accordion-item.open .accordion-body { display:block; }
+
+.product-inner-tag {
+  margin-top:2rem; padding:1.5rem; background:var(--off-white);
+  border-left:2px solid var(--black); display:flex; align-items:center; gap:1rem;
+}
+.product-inner-tag-label { font-size:.42rem; font-weight:700; letter-spacing:.3em; text-transform:uppercase; color:var(--text-grey); margin-bottom:.3rem; }
+.product-inner-tag-text { font-size:.65rem; font-style:italic; color:var(--black); }
+.product-inner-tag-ref { font-size:.42rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--text-grey); }
+
+/* ─── YOU MAY ALSO LIKE ─── */
+.also-like { padding:4rem 2.5rem; border-top:1px solid var(--mid); background:var(--off-white); }
+.also-like-title { font-size:.55rem; font-weight:700; letter-spacing:.35em; text-transform:uppercase; color:var(--text-grey); margin-bottom:2rem; }
+.also-like-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; }
+.also-card { background:var(--white); cursor:none; }
+.also-img { aspect-ratio:3/4; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
+.also-img-inner { width:100%; height:100%; display:flex; align-items:center; justify-content:center; transition:transform .4s cubic-bezier(.25,.46,.45,.94); }
+.also-card:hover .also-img-inner { transform:scale(1.04); }
+.also-info { padding:.9rem .9rem; border-top:1px solid var(--mid); }
+.also-name { font-size:.6rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--black); margin-bottom:.2rem; }
+.also-price { font-size:.65rem; font-weight:700; color:var(--dark-grey); }
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+.site-footer {
+  background:var(--black); color:var(--white);
+  padding:4rem 2.5rem 2rem;
+}
+.footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:3rem; margin-bottom:3rem; padding-bottom:3rem; border-bottom:1px solid rgba(255,255,255,.08); }
+.footer-brand { font-size:1.8rem; font-weight:800; letter-spacing:.2em; margin-bottom:.8rem; }
+.footer-tagline { font-size:.65rem; font-style:italic; color:rgba(255,255,255,.4); margin-bottom:1rem; line-height:1.7; }
+.footer-scripture { font-size:.42rem; font-weight:600; letter-spacing:.3em; text-transform:uppercase; color:rgba(255,255,255,.2); }
+.footer-col-title { font-size:.45rem; font-weight:700; letter-spacing:.35em; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:1.2rem; }
+.footer-links-list { display:flex; flex-direction:column; gap:.65rem; }
+.footer-link { font-size:.63rem; color:rgba(255,255,255,.55); text-decoration:none; transition:color .2s; cursor:none; }
+.footer-link:hover { color:var(--white); }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+.footer-copy { font-size:.42rem; color:rgba(255,255,255,.2); letter-spacing:.12em; }
+.footer-socials { display:flex; gap:1.5rem; }
+.footer-social { font-size:.42rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.35); text-decoration:none; cursor:none; transition:color .2s; }
+.footer-social:hover { color:var(--white); }
+.footer-tag-line { text-align:center; font-size:.42rem; font-style:italic; color:rgba(255,255,255,.12); margin-top:2rem; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,.05); }
+
+/* ── PAGE TRANSITIONS ── */
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.page.active { animation:fadeIn .4s ease; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px) {
+  .bag-layout,.product-layout { grid-template-columns:1fr; }
+  .product-gallery { position:relative; height:70vw; }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+  .story-pillars { grid-template-columns:1fr 1fr; }
+  .also-like-grid { grid-template-columns:1fr 1fr; }
+  .shop-grid { grid-template-columns:1fr 1fr; }
+  .col-story-strip { grid-template-columns:1fr; }
+}
+
+@media(max-width:600px) {
+  .col-grid { grid-template-columns:1fr; }
+  .story-intro { grid-template-columns:1fr; }
+  .nav-left { display:none; }
+  .footer-grid { grid-template-columns:1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curRing"></div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">He knows the ache. <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">BURDENS · LAMENT · COVENANT <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">John 11:35 <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Free shipping $120+ <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">400gsm heavyweight fleece <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">He knows the ache. <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">BURDENS · LAMENT · COVENANT <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">John 11:35 <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">Free shipping $120+ <span class="ticker-dot">✦</span></span>
+    <span class="ticker-item">400gsm heavyweight fleece <span class="ticker-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-left">
+    <a href="#" class="nav-link" onclick="showPage('collections',this)">Collections</a>
+    <a href="#" class="nav-link" onclick="showPage('shop',this)">Shop</a>
+    <a href="#" class="nav-link" onclick="showPage('story',this)">Our Story</a>
+  </div>
+  <a href="#" class="nav-logo" onclick="showPage('collections',null)">ACHE</a>
+  <div class="nav-right">
+    <button class="nav-btn" onclick="showPage('shop',null)">Search</button>
+    <button class="nav-btn" onclick="showPage('bag',null)">
+      Bag <span class="cart-pill" id="cartCount">2</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     PAGE: COLLECTIONS
+══════════════════════════════════════ -->
+<div class="page active" id="page-collections">
+
+  <div class="page-hero">
+    <div class="page-hero-bg-text">Collections</div>
+    <div class="page-eyebrow">ACHE — 2025</div>
+    <h1 class="page-title">
+      <em>Three words.</em>
+      The Collections.
+    </h1>
+    <p class="page-verse">"Bear one another's burdens, and so fulfil the law of Christ." — Galatians 6:2</p>
+  </div>
+
+  <!-- Collections Grid -->
+  <div class="col-grid reveal">
+    <div class="col-panel" onclick="showPage('shop',null)">
+      <div class="col-bg cb-burdens"><span class="col-bg-letter">B</span></div>
+      <div class="col-arrow">↗</div>
+      <div class="col-overlay">
+        <div class="col-tag">Collection 01</div>
+        <div class="col-name">BURDENS</div>
+        <div class="col-ref">"Bear one another's burdens..." — Gal 6:2</div>
+        <div class="col-count">6 Pieces Available</div>
+      </div>
+    </div>
+    <div class="col-panel" onclick="showPage('shop',null)">
+      <div class="col-bg cb-lament"><span class="col-bg-letter">L</span></div>
+      <div class="col-arrow">↗</div>
+      <div class="col-overlay">
+        <div class="col-tag">Collection 02</div>
+        <div class="col-name">LAMENT</div>
+        <div class="col-ref">"Out of the depths I cry..." — Ps 130:1</div>
+        <div class="col-count">4 Pieces Available</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-grid reveal" style="margin-top:2px">
+    <div class="col-panel" onclick="showPage('shop',null)">
+      <div class="col-bg cb-covenant"><span class="col-bg-letter">C</span></div>
+      <div class="col-arrow">↗</div>
+      <div class="col-overlay">
+        <div class="col-tag">Collection 03</div>
+        <div class="col-name">COVENANT</div>
+        <div class="col-ref">"I will never leave you..." — Heb 13:5</div>
+        <div class="col-count">5 Pieces Available</div>
+      </div>
+    </div>
+    <div class="col-panel" onclick="showPage('shop',null)">
+      <div class="col-bg cb-all"><span class="col-bg-letter" style="color:rgba(0,0,0,.06)">A</span></div>
+      <div class="col-arrow" style="border-color:rgba(0,0,0,.15);color:var(--black)">↗</div>
+      <div class="col-overlay" style="background:linear-gradient(transparent,rgba(0,0,0,.15));color:var(--black)">
+        <div class="col-tag" style="color:rgba(0,0,0,.5)">All Products</div>
+        <div class="col-name" style="color:var(--black)">SHOP ALL</div>
+        <div class="col-ref" style="color:rgba(0,0,0,.4)">Browse the full ACHE range</div>
+        <div class="col-count" style="color:rgba(0,0,0,.4)">15 Pieces Total</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Collection Stories -->
+  <div class="col-story-strip reveal">
+    <div class="col-story-item">
+      <div class="col-story-num">01</div>
+      <div class="col-story-title">BURDENS</div>
+      <div class="col-story-body">For the person who carries everyone. Who shows up when it's hard. The BURDENS collection is for those who bear weight that isn't theirs — and do it anyway.</div>
+      <div class="col-story-verse">"Bear one another's burdens, and so fulfil the law of Christ." — Galatians 6:2</div>
+    </div>
+    <div class="col-story-item">
+      <div class="col-story-num">02</div>
+      <div class="col-story-title">LAMENT</div>
+      <div class="col-story-body">For the season of the midnight cry. When the words don't come but the pain does. LAMENT says it out loud — God hears from the depths just as clearly as from the mountain.</div>
+      <div class="col-story-verse">"Out of the depths I cry to You, O Lord." — Psalm 130:1</div>
+    </div>
+    <div class="col-story-item">
+      <div class="col-story-num">03</div>
+      <div class="col-story-title">COVENANT</div>
+      <div class="col-story-body">For the moment you needed someone to stay — and He did. COVENANT is the collection for people who have tested the promise and found it true. He stayed.</div>
+      <div class="col-story-verse">"I will never leave you nor forsake you." — Hebrews 13:5</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">ACHE</div>
+        <div class="footer-tagline">"He knows the ache." — Biblical streetwear for the in-between season.</div>
+        <div class="footer-scripture">John 11:35 — "Jesus wept."</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Collections</div>
+        <div class="footer-links-list">
+          <a href="#" class="footer-link" onclick="showPage('shop',null)">BURDENS — Gal 6:2</a>
+          <a href="#" class="footer-link" onclick="showPage('shop',null)">LAMENT — Ps 130:1</a>
+          <a href="#" class="footer-link" onclick="showPage('shop',null)">COVENANT — Heb 13:5</a>
+          <a href="#" class="footer-link" onclick="showPage('shop',null)">Shop All</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Information</div>
+        <div class="footer-links-list">
+          <a href="#" class="footer-link" onclick="showPage('story',null)">Our Story</a>
+          <a href="#" class="footer-link">Sizing Guide</a>
+          <a href="#" class="footer-link">Shipping & Returns</a>
+          <a href="#" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Follow</div>
+        <div class="footer-links-list">
+          <a href="#" class="footer-link">Instagram</a>
+          <a href="#" class="footer-link">TikTok</a>
+          <a href="#" class="footer-link">Pinterest</a>
+          <a href="#" class="footer-link">The Carry — Community</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 ACHE. All rights reserved.</div>
+      <div class="footer-socials">
+        <a href="#" class="footer-social">Instagram</a>
+        <a href="#" class="footer-social">TikTok</a>
+        <a href="#" class="footer-social">Pinterest</a>
+      </div>
+    </div>
+    <div class="footer-tag-line">"He knows the ache." — The words on every inner tag. John 11:35.</div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: SHOP
+══════════════════════════════════════ -->
+<div class="page" id="page-shop">
+
+  <div class="page-hero">
+    <div class="page-hero-bg-text">Shop</div>
+    <div class="page-eyebrow">ACHE — All Products</div>
+    <h1 class="page-title">
+      <em>Every piece carries</em>
+      The Word.
+    </h1>
+  </div>
+
+  <div class="shop-controls">
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="filterProducts(this,'all')">All (15)</button>
+      <button class="filter-btn" onclick="filterProducts(this,'burdens')">Burdens (6)</button>
+      <button class="filter-btn" onclick="filterProducts(this,'lament')">Lament (4)</button>
+      <button class="filter-btn" onclick="filterProducts(this,'covenant')">Covenant (5)</button>
+      <button class="filter-btn" onclick="filterProducts(this,'tees')">Tees</button>
+      <button class="filter-btn" onclick="filterProducts(this,'hoodies')">Hoodies</button>
+      <button class="filter-btn" onclick="filterProducts(this,'bottoms')">Bottoms</button>
+    </div>
+    <div style="display:flex;gap:1rem;align-items:center">
+      <span class="product-count">15 Products</span>
+      <select class="sort-select">
+        <option>Sort: Featured</option>
+        <option>Price: Low to High</option>
+        <option>Price: High to Low</option>
+        <option>Newest</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="shop-grid">
+
+    <!-- Product 1 -->
+    <div class="shop-product-card" onclick="showPage('product',null)">
+      <div class="shop-img">
+        <span class="shop-badge new">New</span>
+        <div class="shop-img-inner si-1">
+          <span style="font-size:.42rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(0,0,0,.2);">Campaign Image</span>
+          <span style="font-size:2rem;font-weight:800;color:rgba(0,0,0,.06);letter-spacing:.1em;">ACHE</span>
+        </div>
+        <button class="shop-quick-add">Quick Add +</button>
+      </div>
+      <div class="shop-info">
+        <div class="shop-coll-tag">BURDENS · Collection 01</div>
+        <div class="shop-name">Sun-Fade Boxy Tee</div>
+        <div class="shop-verse">"Bear one another's burdens..."</div>
+        <div class="shop-bottom">
+          <span class="shop-price">$55.00</span>
+          <div class="shop-colours">
+            <div class="shop-colour-dot" style="background:#ccc9bc;"></div>
+            <div class="shop-colour-dot" style="background:#3a3028;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="shop-product-card" onclick="showPage('product',null)">
+      <div class="shop-img">
+        <span class="shop-badge new">New</span>
+        <div class="shop-img-inner si-2">
+          <span style="font-size:.42rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.15);">Campaign Image</span>
+          <span style="font-size:2rem;font-weight:800;color:rgba(255,255,255,.04);letter-spacing:.1em;">ACHE</span>
+        </div>
+        <button class="shop-quick-add">Quick Add +</button>
+      </div>
+      <div class="shop-info">
+        <div class="shop-coll-tag">BURDENS · Collection 01</div>
+        <div class="shop-name">Fur-Trim Zip Hoodie</div>
+        <div class="shop-verse">"He carried them all their days."</div>
+        <div class="shop-bottom">
+          <span class="shop-price">$89.00</span>
+          <div class="shop-colours">
+            <div class="shop-colour-dot" style="background:#0a0908;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="shop-product-card" onclick="showPage('product',null)">
+      <div class="shop-img">
+        <div class="shop-img-inner si-3">
+          <span style="font-size:.42rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.15);">Campaign Image</span>
+          <span style="font-size:2rem;font-weight:800;color:rgba(255,255,255,.04);letter-spacing:.1em;">ACHE</span>
+        </div>
+        <button class="shop-quick-add">Quick Add +</button>
+      </div>
+      <div class="shop-info">
+        <div class="shop-coll-tag">LAMENT · Collection 02</div>
+        <div class="shop-name">Contrast Sleeve Tee</div>
+        <div class="shop-verse">"Out of the depths I cry..."</div>
+        <div class="shop-bottom">
+          <span class="shop-price">$65.00</span>
+          <div class="shop-colours">
+            <div class="shop-colour-dot" style="background:#0a0908;border-color:#0a0908;"></div>
+            <div class="shop-colour-dot" style="background:#f5f5f5;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 4 -->
+    <div class="shop-product-card" onclick="showPage('product',null)">
+      <div class="shop-img">
+        <div class="shop-img-inner si-4">
+          <span style="font-size:.42rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(0,0,0,.18);">Campaign Image</span>
+          <span style="font-size:2rem;font-weight:800;color:rgba(0,0,0,.05);letter-spacing:.1em;">ACHE</span>
+        </div>
+        <button class="shop-quick-add">Quick Add +</button>
+      </div>
+      <div class="shop-info">
+        <div class="shop-coll-tag">COVENANT · Collection 03</div>
+        <div class="shop-name">Essential Crewneck</div>
+        <div class="shop-verse">"I will never leave you..."</div>
+        <div class="shop-bottom">
+          <span class="shop-price">$72.00</span>
+          <div class="shop-colours">
+            <div class="shop-colour-dot" style="background:#d5d0c8;"></div>
+            <div class="shop-colour-dot" style="background:#0a0908;border-color:#0a0908;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 5 -->
+    <div class="shop-product-card" onclick="showPage('product',null)">
+      <div class="shop-img">
+        <span class="shop-badge new">New</span>
+        <div class="shop-img-inner si-5">
+          <span style="font-size:.42rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.15);">Campaign Image</span>
+          <span style="font-size:2rem;font-weight:800;color:rgba(255,255,255,.04);letter-spacing:.1em;">ACHE</span>
+        </div>
+        <button class="shop-quick-add">Quick Add +</button>
+      </div>
+      <div class="shop-info">
+        <div class="shop-coll-tag">BURDENS · Collection 01</div>
+        <div class="shop-name">Quarter-Zip Heavyweight</div>
+        <div class="shop-verse">"He stayed through every season."</div>
+        <div class="shop-bottom">
+          <span class="shop-price">$95.00</span>
+          <div class="shop-colours">
+            <div class="shop-colour-dot" style="background:#2a1810;border-color:#2a1810;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 6 -->
+    <div class="shop-product-card" onclick="showPage('product',null)">
+      <div class="shop-img">
+        <div class="shop-img-inner si-6">
+          <span style="font-size:.42rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(0,0,0,.18);">Campaign Image</span>
+          <span style="font-size:2rem;font-weight:800;color:rgba(0,0,0,.05);letter-spacing:.1em;">ACHE</span>
+        </div>
+        <button class="shop-quick-add">Quick Add +</button>
+      </div>
+      <div class="shop-info">
+        <div class="shop-coll-tag">COVENANT · Collection 03</div>
+        <div class="shop-name">Wide Leg Denim — Washed Blue</div>
+        <div class="shop-verse">"Clothed in faithfulness."</div>
+        <div class="shop-bottom">
+          <span class="shop-price">$78.00</span>
+          <div class="shop-colours">
+            <div class="shop-colour-dot" style="background:#5a7090;border-color:#5a7090;"></div>
+            <div class="shop-colour-dot" style="background:#2a2520;border-color:#2a2520;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="site-footer" style="margin-top:2px">
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 ACHE. All rights reserved.</div>
+      <div class="footer-brand" style="font-size:1rem;letter-spacing:.3em;opacity:.4;">ACHE</div>
+      <div class="footer-socials">
+        <a href="#" class="footer-social">Instagram</a>
+        <a href="#" class="footer-social">TikTok</a>
+      </div>
+    </div>
+    <div class="footer-tag-line">"He knows the ache." — John 11:35</div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: OUR STORY
+══════════════════════════════════════ -->
+<div class="page" id="page-story">
+
+  <div class="page-hero">
+    <div class="page-hero-bg-text">Story</div>
+    <div class="page-eyebrow">ACHE — The Foundation</div>
+    <h1 class="page-title">
+      <em>Why we exist.</em>
+      Our Story.
+    </h1>
+  </div>
+
+  <!-- Intro Split -->
+  <div class="story-intro reveal">
+    <div class="story-intro-img">
+      <span class="story-intro-img-text">ACHE</span>
+    </div>
+    <div class="story-intro-content">
+      <div class="story-intro-eyebrow">The Beginning</div>
+      <h2 class="story-intro-title">
+        <em>It started with</em>
+        Two Words.
+      </h2>
+      <p class="story-intro-body">John 11:35. The shortest verse in the Bible. Jesus wept. God stood at a grave He was about to open. He knew Lazarus would rise. He knew the miracle was moments away. And still — He stopped. He sat in the grief. He wept with those who wept.</p>
+      <p class="story-intro-body">That moment is the entire foundation of ACHE. If God Himself felt it — if the Creator of the universe sat in the ache before the resurrection — then our pain is not weakness. It is sacred ground.</p>
+      <a href="#" class="btn btn-black" onclick="showPage('collections',null)" style="margin-top:1.5rem">Shop the Collections →</a>
+    </div>
+  </div>
+
+  <!-- The Verse -->
+  <div class="story-verse-block reveal">
+    <div class="story-verse-ref">John 11:35 — The Founding Verse</div>
+    <div class="story-verse-text">"Jesus wept."</div>
+    <div class="story-verse-cite">The shortest verse. The deepest theology.</div>
+  </div>
+
+  <!-- The Pillars -->
+  <div class="story-pillars reveal">
+    <div class="story-pillar">
+      <div class="story-pillar-num">01</div>
+      <div class="story-pillar-title">The Ache is Sacred</div>
+      <div class="story-pillar-body">We refuse to skip the grief. Every collection leans into a real human experience — burden, lament, covenant. These are not abstract concepts. They are Monday morning. They are 3am.</div>
+    </div>
+    <div class="story-pillar">
+      <div class="story-pillar-num">02</div>
+      <div class="story-pillar-title">Scripture on the Skin</div>
+      <div class="story-pillar-body">Every garment carries the Word — not as decoration but as declaration. The verse on your chest. The promise on your cuff. The hidden tag at your neck that only you know is there.</div>
+    </div>
+    <div class="story-pillar">
+      <div class="story-pillar-num">03</div>
+      <div class="story-pillar-title">Quality as Theology</div>
+      <div class="story-pillar-body">400gsm heavyweight fleece — heavy enough to feel like an embrace. Every detail is intentional. Nothing cheap. Because the Word deserves to be carried in something that lasts.</div>
+    </div>
+    <div class="story-pillar">
+      <div class="story-pillar-num">04</div>
+      <div class="story-pillar-title">Community — The Carry</div>
+      <div class="story-pillar-body">ACHE is not a brand you follow. It's a community you join. People who know what it means to carry something heavy — and to find each other in the weight.</div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="story-timeline reveal">
+    <h2 class="story-timeline-title">How ACHE Came to Be</h2>
+    <div class="timeline-item">
+      <div class="timeline-num">Step 01</div>
+      <div>
+        <div class="timeline-content-title">John 11:35 — The Revelation</div>
+        <div class="timeline-content-body">The brand started with a single realisation: the Christian apparel market was full of celebration but empty of lament. Every brand said "God is good, keep going." Nobody was saying "God is here, even in this." That gap was the beginning of ACHE.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-num">Step 02</div>
+      <div>
+        <div class="timeline-content-title">Three Words — Three Collections</div>
+        <div class="timeline-content-body">BURDENS. LAMENT. COVENANT. Three words that map the journey — from carrying weight, to crying out from the depths, to the unshakeable promise on the other side. Three collections, three scriptures, one story.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-num">Step 03</div>
+      <div>
+        <div class="timeline-content-title">The Hidden Tag — "He knows the ache."</div>
+        <div class="timeline-content-body">Every ACHE garment has a hidden inner neck label reading "He knows the ache." · John 11:35. A private blessing. Only the wearer knows it's there. A reminder that sits closest to the skin.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-num">Step 04</div>
+      <div>
+        <div class="timeline-content-title">Made on Demand — Nothing Wasted</div>
+        <div class="timeline-content-body">Nothing is produced until it belongs to someone. Every piece is made when ordered, in premium 400gsm fleece, with exacting print standards. The brand exists to serve the people in it — not to fill warehouses.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">ACHE</div>
+        <div class="footer-tagline">"He knows the ache."</div>
+        <div class="footer-scripture">John 11:35</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Collections</div>
+        <div class="footer-links-list">
+          <a href="#" class="footer-link" onclick="showPage('shop',null)">BURDENS</a>
+          <a href="#" class="footer-link" onclick="showPage('shop',null)">LAMENT</a>
+          <a href="#" class="footer-link" onclick="showPage('shop',null)">COVENANT</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Information</div>
+        <div class="footer-links-list">
+          <a href="#" class="footer-link" onclick="showPage('story',null)">Our Story</a>
+          <a href="#" class="footer-link">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Follow</div>
+        <div class="footer-links-list">
+          <a href="#" class="footer-link">Instagram</a>
+          <a href="#" class="footer-link">TikTok</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-tag-line">"He knows the ache." — John 11:35</div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: BAG
+══════════════════════════════════════ -->
+<div class="page" id="page-bag">
+
+  <div class="bag-layout">
+
+    <!-- Main -->
+    <div class="bag-main">
+      <div class="bag-title-row">
+        <h1 class="bag-title">Your Bag</h1>
+        <span class="bag-count">2 Items</span>
+      </div>
+
+      <!-- Item 1 -->
+      <div class="bag-item">
+        <div class="bag-item-img">
+          <div class="bag-item-img-inner si-1" style="display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:.42rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(0,0,0,.2);">ACHE</span>
+          </div>
+        </div>
+        <div>
+          <div class="bag-item-collection">BURDENS · Collection 01</div>
+          <div class="bag-item-name">Sun-Fade Boxy Tee</div>
+          <div class="bag-item-meta">Size: L &nbsp;·&nbsp; Colour: Sage Olive</div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="updateQty(this,-1)">−</button>
+            <span class="qty-num">1</span>
+            <button class="qty-btn" onclick="updateQty(this,1)">+</button>
+          </div>
+          <button class="bag-remove">Remove</button>
+        </div>
+        <div class="bag-item-price">$55.00</div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="bag-item">
+        <div class="bag-item-img">
+          <div class="bag-item-img-inner si-2" style="display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:.42rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.15);">ACHE</span>
+          </div>
+        </div>
+        <div>
+          <div class="bag-item-collection">BURDENS · Collection 01</div>
+          <div class="bag-item-name">Fur-Trim Zip Hoodie</div>
+          <div class="bag-item-meta">Size: M &nbsp;·&nbsp; Colour: Midnight Black</div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="updateQty(this,-1)">−</button>
+            <span class="qty-num">1</span>
+            <button class="qty-btn" onclick="updateQty(this,1)">+</button>
+          </div>
+          <button class="bag-remove">Remove</button>
+        </div>
+        <div class="bag-item-price">$89.00</div>
+      </div>
+
+      <!-- Continue -->
+      <div style="margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
+        <a href="#" class="btn btn-ghost" onclick="showPage('shop',null)">← Continue Shopping</a>
+      </div>
+
+      <!-- Inner tag note -->
+      <div style="margin-top:3rem;padding:2rem;background:var(--off-white);border-left:2px solid var(--black);">
+        <div style="font-size:.42rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--text-grey);margin-bottom:.5rem;">Included with every order</div>
+        <div style="font-size:.72rem;font-style:italic;color:var(--black);margin-bottom:.3rem;">"He knows the ache." — John 11:35</div>
+        <div style="font-size:.6rem;color:var(--text-grey);">Hidden inner neck label on every ACHE garment. A private blessing worn closest to the skin.</div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="bag-sidebar">
+      <div class="bag-summary-title">Order Summary</div>
+
+      <div class="bag-summary-row">
+        <span class="bag-summary-label">Subtotal (2 items)</span>
+        <span class="bag-summary-val">$144.00</span>
+      </div>
+      <div class="bag-summary-row">
+        <span class="bag-summary-label">Shipping</span>
+        <span class="bag-summary-val">Calculated at checkout</span>
+      </div>
+      <div class="bag-summary-row">
+        <span class="bag-summary-label">Discount</span>
+        <span class="bag-summary-val">—</span>
+      </div>
+
+      <div class="bag-summary-divider"></div>
+      <div class="bag-summary-total">
+        <span>Total</span>
+        <span>$144.00</span>
+      </div>
+
+      <!-- Promo -->
+      <div style="display:flex;gap:0;border:1px solid var(--mid);margin-bottom:1.5rem;">
+        <input type="text" placeholder="Promo code" style="flex:1;border:none;background:var(--white);padding:.75rem 1rem;font-family:var(--font);font-size:.55rem;color:var(--black);outline:none;letter-spacing:.05em;">
+        <button style="background:var(--black);color:var(--white);border:none;padding:.75rem 1rem;font-family:var(--font);font-size:.48rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;cursor:none;white-space:nowrap;">Apply</button>
+      </div>
+
+      <button class="bag-checkout">Checkout — $144.00 →</button>
+      <button class="bag-continue" onclick="showPage('shop',null)">Continue Shopping</button>
+
+      <div class="bag-secure">🔒 &nbsp; Secure checkout · SSL encrypted</div>
+
+      <div class="bag-inner-tag">
+        Every ACHE order arrives in branded packaging with a handwritten note.<br>
+        <em>"He knows the ache." — John 11:35</em>
+      </div>
+
+      <!-- Free shipping progress -->
+      <div style="margin-top:2rem;padding:1.5rem;background:var(--white);border:1px solid var(--mid);">
+        <div style="font-size:.42rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--text-grey);margin-bottom:.8rem;">Free Shipping Progress</div>
+        <div style="height:4px;background:var(--mid);border-radius:2px;margin-bottom:.6rem;overflow:hidden;">
+          <div style="height:100%;width:72%;background:var(--black);border-radius:2px;transition:width .5s;"></div>
+        </div>
+        <div style="font-size:.5rem;color:var(--dark-grey);">Spend <strong>$24 more</strong> for free shipping</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: PRODUCT
+══════════════════════════════════════ -->
+<div class="page" id="page-product">
+
+  <div class="product-layout">
+
+    <!-- Gallery -->
+    <div class="product-gallery">
+      <div class="product-main-img">
+        <span class="product-main-img-text">ACHE</span>
+        <div style="position:absolute;bottom:1.5rem;left:1.5rem;font-size:.42rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(0,0,0,.3);">Replace with product image</div>
+      </div>
+      <div class="product-thumb-row">
+        <div class="product-thumb active pt-1" onclick="switchThumb(this)">
+          <span class="product-thumb-text">Front</span>
+        </div>
+        <div class="product-thumb pt-2" onclick="switchThumb(this)">
+          <span class="product-thumb-text" style="color:rgba(255,255,255,.2);">Back</span>
+        </div>
+        <div class="product-thumb pt-3" onclick="switchThumb(this)">
+          <span class="product-thumb-text" style="color:rgba(255,255,255,.2);">Detail</span>
+        </div>
+        <div class="product-thumb pt-1" onclick="switchThumb(this)">
+          <span class="product-thumb-text">Editorial</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details -->
+    <div class="product-details">
+
+      <div class="product-breadcrumb">
+        <a href="#" onclick="showPage('collections',null)">Collections</a>
+        <span>/</span>
+        <a href="#" onclick="showPage('shop',null)">Burdens</a>
+        <span>/</span>
+        Sun-Fade Boxy Tee
+      </div>
+
+      <div class="product-collection-tag">BURDENS · Collection 01 · GAL 6:2</div>
+      <h1 class="product-name-lg">Sun-Fade<br>Boxy Tee</h1>
+      <div class="product-verse-tag">"Bear one another's burdens, and so fulfil the law of Christ." — Galatians 6:2</div>
+
+      <div class="product-price-lg">$55.00</div>
+
+      <!-- Colour -->
+      <div class="product-option-label">Colour <span>Sage Olive</span></div>
+      <div class="colour-row">
+        <div class="colour-option active" style="background:#ccc9bc;" title="Sage Olive"></div>
+        <div class="colour-option" style="background:#3a3028;" title="Aged Timber" onclick="selectColour(this)"></div>
+      </div>
+
+      <!-- Size -->
+      <div class="product-option-label">Size <span>Select a size</span></div>
+      <div class="size-row">
+        <button class="size-option sold-out">XS</button>
+        <button class="size-option" onclick="selectSize(this)">S</button>
+        <button class="size-option active" onclick="selectSize(this)">M</button>
+        <button class="size-option" onclick="selectSize(this)">L</button>
+        <button class="size-option" onclick="selectSize(this)">XL</button>
+        <button class="size-option" onclick="selectSize(this)">2XL</button>
+      </div>
+
+      <button class="size-guide-link">Size Guide →</button>
+
+      <button class="add-to-bag-btn" onclick="addToBag()">
+        Add to Bag ✦
+      </button>
+      <button class="wishlist-btn">+ Save to Wishlist</button>
+
+      <!-- Product Story -->
+      <div class="product-story">
+        <div class="product-story-title">The Story Behind This Piece</div>
+        <div class="product-story-body">The BURDENS Sun-Fade Tee is built for the person who carries what others can't hold. The sun-fade wash — lighter at the centre, darker at the collar and edges — is the visual language of someone who has been through seasons and emerged changed but not destroyed. The "ACHE" chest print carries the brand mark. The back panel carries the full Galatians 6:2 verse. And at the inner neck: "He knows the ache." — John 11:35.</div>
+      </div>
+
+      <!-- Inner Tag Feature -->
+      <div class="product-inner-tag">
+        <div>
+          <div class="product-inner-tag-label">Hidden Inner Tag</div>
+          <div class="product-inner-tag-text">"He knows the ache."</div>
+          <div class="product-inner-tag-ref">John 11:35 — on every ACHE garment</div>
+        </div>
+      </div>
+
+      <!-- Accordion -->
+      <div class="product-details-accordion">
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAccordion(this)">
+            Details & Materials
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <strong>Fabric:</strong> 100% heavyweight combed cotton · 400gsm · Sun-faded garment dye<br><br>
+            <strong>Fit:</strong> Oversized boxy · Drop shoulder · Cropped slightly at hem<br><br>
+            <strong>Print:</strong> Front centre — "ACHE" in black serif · Back — Full Galatians 6:2 verse in black Montserrat<br><br>
+            <strong>Inner Label:</strong> "He knows the ache." · John 11:35 · Woven in gold thread<br><br>
+            <strong>Sizes:</strong> S — 2XL · Fits true to oversized size
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAccordion(this)">
+            Care Instructions
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            Machine wash cold · Inside out to preserve sun-fade wash · Do not tumble dry · Lay flat to dry · Do not iron directly on print · Cold wash only preserves the distressed ink texture
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAccordion(this)">
+            Shipping & Returns
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <strong>Made on demand</strong> — allow 5–7 business days production · Shipping: 3–7 days standard, 1–3 days express<br><br>
+            <strong>Free shipping</strong> on orders over $120 · Worldwide delivery available<br><br>
+            <strong>Returns:</strong> 30-day return window on unworn, unwashed items with tags attached
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAccordion(this)">
+            The Scripture — Galatians 6:2
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <em>"Bear one another's burdens, and so fulfil the law of Christ."</em><br><br>
+            The Greek word used here — báros — means a heavy load, a weight pressing down. The command isn't to pretend the burden isn't heavy. It's to carry it together. This piece is for the person who chooses to carry what others can't hold — and for those who have been carried.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- You May Also Like -->
+  <div class="also-like">
+    <div class="also-like-title">You May Also Like</div>
+    <div class="also-like-grid">
+      <div class="also-card" onclick="showPage('product',null)">
+        <div class="also-img si-2" style="aspect-ratio:3/4;">
+          <div class="also-img-inner" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:.4rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.1);">ACHE</span>
+          </div>
+        </div>
+        <div class="also-info">
+          <div class="also-name">Fur-Trim Zip Hoodie</div>
+          <div class="also-price">$89.00</div>
+        </div>
+      </div>
+      <div class="also-card" onclick="showPage('product',null)">
+        <div class="also-img si-3" style="aspect-ratio:3/4;">
+          <div class="also-img-inner" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:.4rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.1);">ACHE</span>
+          </div>
+        </div>
+        <div class="also-info">
+          <div class="also-name">Contrast Sleeve Tee</div>
+          <div class="also-price">$65.00</div>
+        </div>
+      </div>
+      <div class="also-card" onclick="showPage('product',null)">
+        <div class="also-img si-6" style="aspect-ratio:3/4;">
+          <div class="also-img-inner" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:.4rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(0,0,0,.12);">ACHE</span>
+          </div>
+        </div>
+        <div class="also-info">
+          <div class="also-name">Essential Crewneck</div>
+          <div class="also-price">$72.00</div>
+        </div>
+      </div>
+      <div class="also-card" onclick="showPage('product',null)">
+        <div class="also-img si-5" style="aspect-ratio:3/4;">
+          <div class="also-img-inner" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:.4rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.1);">ACHE</span>
+          </div>
+        </div>
+        <div class="also-info">
+          <div class="also-name">Quarter-Zip Heavyweight</div>
+          <div class="also-price">$95.00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer" style="margin-top:2px">
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 ACHE. All rights reserved.</div>
+      <div class="footer-brand" style="font-size:1rem;letter-spacing:.3em;opacity:.4;">ACHE</div>
+      <div class="footer-socials">
+        <a href="#" class="footer-social">Instagram</a>
+        <a href="#" class="footer-social">TikTok</a>
+      </div>
+    </div>
+    <div class="footer-tag-line">"He knows the ache." — John 11:35</div>
+  </footer>
+
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+const curRing = document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  curRing.style.left=rx+'px'; curRing.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>20);
+});
+
+// ── PAGE NAVIGATION ──
+function showPage(id, linkEl){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  if(linkEl) linkEl.classList.add('active');
+  window.scrollTo(0,0);
+  // re-trigger reveals
+  setTimeout(()=>{
+    document.querySelectorAll('.reveal').forEach(el=>{
+      if(isInView(el)) el.classList.add('visible');
+    });
+  },100);
+}
+
+function isInView(el){
+  const r=el.getBoundingClientRect();
+  return r.top<window.innerHeight && r.bottom>0;
+}
+
+// ── SCROLL REVEAL ──
+const revealObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); revealObs.unobserve(e.target); }});
+},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+// ── FILTERS ──
+function filterProducts(btn, filter){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── ACCORDION ──
+function toggleAccordion(btn){
+  const item=btn.parentElement;
+  item.classList.toggle('open');
+}
+
+// ── SIZE SELECT ──
+function selectSize(btn){
+  document.querySelectorAll('.size-option').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── COLOUR SELECT ──
+function selectColour(dot){
+  document.querySelectorAll('.colour-option').forEach(d=>d.classList.remove('active'));
+  dot.classList.add('active');
+}
+
+// ── THUMB SWITCH ──
+function switchThumb(thumb){
+  document.querySelectorAll('.product-thumb').forEach(t=>t.classList.remove('active'));
+  thumb.classList.add('active');
+}
+
+// ── QTY CONTROL ──
+function updateQty(btn,delta){
+  const numEl=btn.parentElement.querySelector('.qty-num');
+  let val=parseInt(numEl.textContent)+delta;
+  if(val<1) val=1;
+  numEl.textContent=val;
+}
+
+// ── ADD TO BAG ──
+function addToBag(){
+  const count=document.getElementById('cartCount');
+  count.textContent=parseInt(count.textContent)+1;
+  const btn=document.querySelector('.add-to-bag-btn');
+  const orig=btn.innerHTML;
+  btn.innerHTML='Added ✓';
+  btn.style.background='var(--dark-grey)';
+  setTimeout(()=>{ btn.innerHTML=orig; btn.style.background=''; },2000);
+}
+
+// ── INIT ──
+showPage('collections', document.querySelector('.nav-link'));
+</script>
+</body>
+</html>

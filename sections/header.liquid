@@ -7,6 +7,10 @@
   <div class="nav-left">
     {% for link in linklists[section.settings.main_linklist].links %}
       <a href="{{ link.url }}" class="nav-link {% if link.active %}active{% endif %}">{{ link.title }}</a>
+    {% else %}
+      <a href="{{ routes.collections_url }}" class="nav-link">Collections</a>
+      <a href="{{ routes.all_products_collection_url }}" class="nav-link">Shop</a>
+      <a href="{{ pages['our-story'].url | default: '#' }}" class="nav-link">Our Story</a>
     {% endfor %}
   </div>
   

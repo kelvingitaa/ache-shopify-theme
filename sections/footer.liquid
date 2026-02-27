@@ -13,6 +13,10 @@
           <div class="footer-links">
             {% for link in linklists[block.settings.menu].links %}
               <a href="{{ link.url }}" class="footer-link">{{ link.title }}</a>
+            {% else %}
+              <a href="{{ routes.collections_url }}" class="footer-link">Collections</a>
+              <a href="{{ routes.all_products_collection_url }}" class="footer-link">Shop All</a>
+              <a href="{{ pages['our-story'].url | default: '#' }}" class="footer-link">Our Story</a>
             {% endfor %}
           </div>
         </div>
@@ -22,8 +26,8 @@
     <div>
       <div class="footer-col-title">Community</div>
       <div class="footer-links">
-        <a href="{{ settings.social_instagram_link }}" class="footer-link">Instagram</a>
-        <a href="{{ settings.social_tiktok_link }}" class="footer-link">TikTok</a>
+        <a href="{{ settings.social_instagram_link | default: '#' }}" class="footer-link">Instagram</a>
+        <a href="{{ settings.social_tiktok_link | default: '#' }}" class="footer-link">TikTok</a>
       </div>
     </div>
   </div>
@@ -31,8 +35,8 @@
   <div class="footer-bottom">
     <div class="footer-copy">© {{ 'now' | date: "%Y" }} {{ shop.name }}. All rights reserved. Biblical Streetwear.</div>
     <div class="footer-socials">
-      <a href="{{ settings.social_instagram_link }}" class="footer-social">Instagram</a>
-      <a href="{{ settings.social_tiktok_link }}" class="footer-social">TikTok</a>
+      <a href="{{ settings.social_instagram_link | default: '#' }}" class="footer-social">Instagram</a>
+      <a href="{{ settings.social_tiktok_link | default: '#' }}" class="footer-social">TikTok</a>
     </div>
   </div>
 

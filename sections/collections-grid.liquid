@@ -5,9 +5,7 @@
       <div class="section-label">{{ section.settings.subheading }}</div>
       <h2 class="section-title">{{ section.settings.heading }}</h2>
     </div>
-    {% if section.settings.button_link != blank %}
-      <a href="{{ section.settings.button_link }}" class="section-link">{{ section.settings.button_label }}</a>
-    {% endif %}
+    <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="section-link">{{ section.settings.button_label }}</a>
   </div>
 
   <div class="collections-grid">

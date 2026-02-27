@@ -11,12 +11,8 @@
     </h1>
     <div class="hero-verse">{{ section.settings.verse }}</div>
     <div class="hero-cta-row">
-      {% if section.settings.button_link != blank %}
-        <a href="{{ section.settings.button_link }}" class="btn-primary">{{ section.settings.button_label }}</a>
-      {% endif %}
-      {% if section.settings.secondary_button_link != blank %}
-        <a href="{{ section.settings.secondary_button_link }}" class="btn-secondary">{{ section.settings.secondary_button_label }}</a>
-      {% endif %}
+      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="btn-primary">{{ section.settings.button_label }}</a>
+      <a href="{{ section.settings.secondary_button_link | default: '#' }}" class="btn-secondary">{{ section.settings.secondary_button_label }}</a>
     </div>
   </div>
 
